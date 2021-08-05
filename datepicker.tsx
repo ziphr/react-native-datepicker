@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   View,
   Text,
@@ -11,35 +11,35 @@ import {
   Platform,
   Animated,
   Keyboard,
-} from 'react-native';
+} from "react-native";
 
-import { setLocale } from '@app/utils/moment-locale-setter';
+import { setLocale } from "@app/utils/moment-locale-setter";
 
-import Style from './style';
+import Style from "./style";
 
-const moment = require('moment/min/moment-with-locales');
+const moment = require("moment/min/moment-with-locales");
 
 /* If the Phone Language is set to Indonesian then change
    the locale setting for Moment */
 setLocale();
 
 const FORMATS = {
-  date: 'YYYY-MM-DD',
-  datetime: 'YYYY-MM-DD HH:mm',
-  time: 'HH:mm',
+  date: "YYYY-MM-DD",
+  datetime: "YYYY-MM-DD HH:mm",
+  time: "HH:mm",
 };
 
 const SUPPORTED_ORIENTATIONS = [
-  'portrait',
-  'portrait-upside-down',
-  'landscape',
-  'landscape-left',
-  'landscape-right',
+  "portrait",
+  "portrait-upside-down",
+  "landscape",
+  "landscape-left",
+  "landscape-right",
 ];
 
 type OwnProps = {
-  mode?: 'date' | 'datetime' | 'time';
-  androidMode?: 'clock' | 'calendar' | 'spinner' | 'default';
+  mode?: "date" | "datetime" | "time";
+  androidMode?: "clock" | "calendar" | "spinner" | "default";
   date?: string | any | any;
   format?: string;
   minDate?: string | any; // TODO: PropTypes.instanceOf(Date)
@@ -99,16 +99,16 @@ class DatePicker extends Component<Props, State> {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.date !== this.props.date) {
-      this.setState({date: this.getDate(nextProps.date)});
+      this.setState({ date: this.getDate(nextProps.date) });
     }
   }
 
   setModalVisible(visible: any) {
-    const {height, duration} = this.props;
+    const { height, duration } = this.props;
 
     // slide animation
     if (visible) {
-      this.setState({modalVisible: visible});
+      this.setState({ modalVisible: visible });
       // @ts-expect-error ts-migrate(2345) FIXME: Property 'useNativeDriver' is missing in type '{ t... Remove this comment to see the full error message
       return Animated.timing(this.state.animatedHeight, {
         toValue: height,
@@ -120,7 +120,7 @@ class DatePicker extends Component<Props, State> {
       toValue: 0,
       duration,
     }).start(() => {
-      this.setState({modalVisible: visible});
+      this.setState({ modalVisible: visible });
     });
   }
 
@@ -133,7 +133,7 @@ class DatePicker extends Component<Props, State> {
   }
 
   onPressMask() {
-    if (typeof this.props.onPressMask === 'function') {
+    if (typeof this.props.onPressMask === "function") {
       this.props.onPressMask();
     } else {
       this.onPressCancel();
@@ -143,7 +143,7 @@ class DatePicker extends Component<Props, State> {
   onPressCancel() {
     this.setModalVisible(false);
 
-    if (typeof this.props.onCloseModal === 'function') {
+    if (typeof this.props.onCloseModal === "function") {
       this.props.onCloseModal();
     }
   }
@@ -152,7 +152,7 @@ class DatePicker extends Component<Props, State> {
     this.datePicked();
     this.setModalVisible(false);
 
-    if (typeof this.props.onCloseModal === 'function') {
+    if (typeof this.props.onCloseModal === "function") {
       this.props.onCloseModal();
     }
   }
@@ -160,7 +160,7 @@ class DatePicker extends Component<Props, State> {
   // @ts-expect-error ts-migrate(7023) FIXME: 'getDate' implicitly has return type 'any' because... Remove this comment to see the full error message
   getDate(date = this.props.date) {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-    const {mode, minDate, maxDate, format = FORMATS[mode]} = this.props;
+    const { mode, minDate, maxDate, format = FORMATS[mode] } = this.props;
 
     // date默认值
     if (!date) {
@@ -195,10 +195,10 @@ class DatePicker extends Component<Props, State> {
 
   getDateStr(date = this.props.date) {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-    const {mode, format = FORMATS[mode]} = this.props;
+    const { mode, format = FORMATS[mode] } = this.props;
     const dateInstance = date instanceof Date ? date : this.getDate(date);
 
-    if (typeof this.props.getDateStr === 'function') {
+    if (typeof this.props.getDateStr === "function") {
       return this.props.getDateStr(dateInstance);
     }
 
@@ -206,22 +206,23 @@ class DatePicker extends Component<Props, State> {
   }
 
   datePicked() {
-    if (typeof this.props.onDateChange === 'function') {
+    if (typeof this.props.onDateChange === "function") {
       this.props.onDateChange(
         this.getDateStr(this.state.date),
-        this.state.date,
+        this.state.date
       );
     }
   }
 
   getTitleElement() {
-    const {date, placeholder, customStyles, allowFontScaling} = this.props;
+    const { date, placeholder, customStyles, allowFontScaling } = this.props;
 
     if (!date && placeholder) {
       return (
         <Text
           allowFontScaling={allowFontScaling}
-          style={[Style.placeholderText, customStyles.placeholderText]}>
+          style={[Style.placeholderText, customStyles.placeholderText]}
+        >
           {placeholder}
         </Text>
       );
@@ -229,7 +230,8 @@ class DatePicker extends Component<Props, State> {
     return (
       <Text
         allowFontScaling={allowFontScaling}
-        style={[Style.dateText, customStyles.dateText]}>
+        style={[Style.dateText, customStyles.dateText]}
+      >
         {this.getDateStr()}
       </Text>
     );
@@ -248,7 +250,7 @@ class DatePicker extends Component<Props, State> {
     }, 200);
   }
 
-  onDatePicked({action, year, month, day}: any) {
+  onDatePicked({ action, year, month, day }: any) {
     if (action !== DatePickerAndroid.dismissedAction) {
       this.setState({
         date: new Date(year, month, day),
@@ -259,13 +261,10 @@ class DatePicker extends Component<Props, State> {
     }
   }
 
-  onTimePicked({action, hour, minute}: any) {
+  onTimePicked({ action, hour, minute }: any) {
     if (action !== DatePickerAndroid.dismissedAction) {
       this.setState({
-        date: moment()
-          .hour(hour)
-          .minute(minute)
-          .toDate(),
+        date: moment().hour(hour).minute(minute).toDate(),
       });
       this.datePicked();
     } else {
@@ -273,7 +272,7 @@ class DatePicker extends Component<Props, State> {
     }
   }
 
-  onDatetimePicked({action, year, month, day}: any) {
+  onDatetimePicked({ action, year, month, day }: any) {
     const {
       mode,
       androidMode,
@@ -300,7 +299,7 @@ class DatePicker extends Component<Props, State> {
     year: any,
     month: any,
     day: any,
-    {action, hour, minute}: any,
+    { action, hour, minute }: any
   ) {
     if (action !== DatePickerAndroid.dismissedAction) {
       this.setState({
@@ -324,7 +323,7 @@ class DatePicker extends Component<Props, State> {
       date: this.getDate(),
     });
 
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       this.setModalVisible(true);
     } else {
       const {
@@ -338,14 +337,14 @@ class DatePicker extends Component<Props, State> {
       } = this.props;
 
       // 选日期
-      if (mode === 'date') {
+      if (mode === "date") {
         DatePickerAndroid.open({
           date: this.state.date,
           minDate: minDate && this.getDate(minDate),
           maxDate: maxDate && this.getDate(maxDate),
           mode: androidMode,
         }).then(this.onDatePicked);
-      } else if (mode === 'time') {
+      } else if (mode === "time") {
         // 选时间
 
         const timeMoment = moment(this.state.date);
@@ -356,7 +355,7 @@ class DatePicker extends Component<Props, State> {
           is24Hour,
           mode: androidMode,
         }).then(this.onTimePicked);
-      } else if (mode === 'datetime') {
+      } else if (mode === "datetime") {
         // 选日期和时间
 
         DatePickerAndroid.open({
@@ -368,13 +367,13 @@ class DatePicker extends Component<Props, State> {
       }
     }
 
-    if (typeof this.props.onOpenModal === 'function') {
+    if (typeof this.props.onOpenModal === "function") {
       this.props.onOpenModal();
     }
   }
 
   _renderIcon() {
-    const {showIcon, iconSource, iconComponent, customStyles} = this.props;
+    const { showIcon, iconSource, iconComponent, customStyles } = this.props;
 
     if (showIcon) {
       if (iconComponent) {
@@ -423,15 +422,8 @@ class DatePicker extends Component<Props, State> {
         onPress={this.onPressDate}
         style={[Style.dateTouch, style]}
         testID={testID}
-        underlayColor="transparent">
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+        underlayColor="transparent"
+      >
         <View style={[Style.dateTouchBody, customStyles.dateTouchBody]}>
           {!this.props.hideText ? (
             <View style={dateInputStyle}>{this.getTitleElement()}</View>
@@ -439,81 +431,36 @@ class DatePicker extends Component<Props, State> {
             <View />
           )}
           {this._renderIcon()}
-          {Platform.OS === 'ios' && (
+          {Platform.OS === "ios" && (
             <Modal
               animationType="none"
               onRequestClose={() => {
                 this.setModalVisible(false);
               }}
-              // @ts-expect-error ts-migrate(2769) FIXME: Type 'string[]' is not assignable to type '("portr... Remove this comment to see the full error message
               supportedOrientations={SUPPORTED_ORIENTATIONS}
               transparent
-              visible={this.state.modalVisible}>
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-              <View style={{flex: 1}}>
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+              visible={this.state.modalVisible}
+            >
+              <View style={{ flex: 1 }}>
                 <TouchableComponent
                   activeOpacity={1}
                   onPress={this.onPressMask}
                   style={Style.datePickerMask}
-                  underlayColor="#00000077">
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-                  <TouchableComponent style={{flex: 1}} underlayColor="#fff">
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                  underlayColor="#00000077"
+                >
+                  <TouchableComponent style={{ flex: 1 }} underlayColor="#fff">
                     <Animated.View
                       style={[
                         Style.datePickerCon,
-                        {height: this.state.animatedHeight},
+                        { height: this.state.animatedHeight },
                         customStyles.datePickerCon,
-                      ]}>
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                      ]}
+                    >
                       <View
                         pointerEvents={
-                          this.state.allowPointerEvents ? 'auto' : 'none'
-                        }>
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                          this.state.allowPointerEvents ? "auto" : "none"
+                        }
+                      >
                         <DatePickerIOS
                           date={this.state.date}
                           locale={locale}
@@ -528,14 +475,6 @@ class DatePicker extends Component<Props, State> {
                           }
                         />
                       </View>
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <TouchableComponent
                         onPress={this.onPressCancel}
                         style={[
@@ -544,33 +483,19 @@ class DatePicker extends Component<Props, State> {
                           customStyles.btnCancel,
                         ]}
                         testID={cancelBtnTestID}
-                        underlayColor="transparent">
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                        underlayColor="transparent"
+                      >
                         <Text
                           allowFontScaling={allowFontScaling}
                           style={[
                             Style.btnTextText,
                             Style.btnTextCancel,
                             customStyles.btnTextCancel,
-                          ]}>
+                          ]}
+                        >
                           {cancelBtnText}
                         </Text>
                       </TouchableComponent>
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <TouchableComponent
                         onPress={this.onPressConfirm}
                         style={[
@@ -579,21 +504,15 @@ class DatePicker extends Component<Props, State> {
                           customStyles.btnConfirm,
                         ]}
                         testID={confirmBtnTestID}
-                        underlayColor="transparent">
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(2578) FIXME: Unused '@ts-expect-error' directive. */}
-                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                        underlayColor="transparent"
+                      >
                         <Text
                           allowFontScaling={allowFontScaling}
                           style={[
                             Style.btnTextText,
                             customStyles.btnTextConfirm,
-                          ]}>
+                          ]}
+                        >
                           {confirmBtnText}
                         </Text>
                       </TouchableComponent>
@@ -610,17 +529,17 @@ class DatePicker extends Component<Props, State> {
 }
 
 DatePicker.defaultProps = {
-  mode: 'date',
-  androidMode: 'default',
-  date: '',
+  mode: "date",
+  androidMode: "default",
+  date: "",
   // component height: 216(DatePickerIOS) + 1(borderTop) + 42(marginTop), IOS only
   height: 259,
 
   // slide animation duration time, default to 300ms, IOS only
   duration: 300,
-  confirmBtnText: '确定',
-  cancelBtnText: '取消',
-  iconSource: require('./date_icon.png'),
+  confirmBtnText: "确定",
+  cancelBtnText: "取消",
+  iconSource: require("./date_icon.png"),
   customStyles: {},
 
   // whether or not show the icon
@@ -628,7 +547,7 @@ DatePicker.defaultProps = {
   disabled: false,
   allowFontScaling: true,
   hideText: false,
-  placeholder: '',
+  placeholder: "",
   TouchableComponent: TouchableHighlight,
   modalOnResponderTerminationRequest: (e: any) => true,
 };
